@@ -1,0 +1,15 @@
+[2017-07-26 21:44:14,575] DEBUG :: Call to "landing" took 0.043 seconds
+[2017-07-26 21:44:39,793] DEBUG :: Call to "dev" took 0.004 seconds
+[2017-07-26 21:45:39,991] DEBUG :: Call to "dev" took 0.007 seconds
+[2017-07-26 21:45:41,702] DEBUG :: Call to "dev" took 0.005 seconds
+[2017-07-26 21:46:46,674] DEBUG :: Call to "dev" took 0.013 seconds
+[2017-07-26 21:46:48,147] DEBUG :: Call to "quantitative_questions" took 0.080 seconds
+[2017-07-26 21:46:48,281] DEBUG :: Call to "rate_comments" took 0.202 seconds
+[2017-07-26 21:46:48,284] DEBUG :: Call to "end" took 0.126 seconds
+[2017-07-26 21:46:48,291] DEBUG :: Call to "peer_responses" took 0.176 seconds
+[2017-07-26 21:46:48,320] DEBUG :: Call to "qualitative_questions" took 0.229 seconds
+[2017-07-26 21:46:48,478] DEBUG :: Call to "landing" took 0.359 seconds
+[2017-07-26 21:46:48,501] DEBUG :: Call to "personal_information" took 0.386 seconds
+[2017-07-26 21:48:35,662] DEBUG :: Call to "dev" took 0.012 seconds
+[2017-07-26 21:48:38,636] DEBUG :: Call to "dev" took 0.012 seconds
+[2017-07-26 21:53:44,882] DEBUG :: Call to "dev" took 0.018 seconds

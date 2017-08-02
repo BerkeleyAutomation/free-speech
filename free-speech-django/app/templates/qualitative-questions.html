@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans 'Your Ideas' %}{% endblock %}
+{% block main-heading %}{% trans 'Your Ideas' %}{% endblock %}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function() {
+      displayNoCurrentRespondentError();
+
+      $('input[type=text], textarea').each(function() {
+        var inputElement = $(this);
+        var questionID = inputElement.attr('question-id');
+        var path = ['comments', questionID];
+
+        inputElement.on('input', function() {
+          var text = inputElement.val().trim();
+          setResponseValue(path, text);
+        });
+
+        var comment = getResponseValue(path);
+        if (comment !== null) {
+          inputElement.val(comment);
+        }
+      });
+    });
+  </script>
+{% endblock %}
+
+{% block content %}
+  <ol id="qualitative-questions">
+    {% for question in questions %}
+      <li>
+        <p class="prompt">{% trans question.prompt %}</p>
+        <div class="container">
+          <textarea question-id="{{ question.id }}" class="comment"></textarea>
+        </div>
+      </li>
+    {% endfor %}
+  </ol>
+  {% url 'pcari:rate-comments' as previous_link %}
+  {% url 'pcari:personal-information' as next_link %}
+  {% include 'nav-buttons.html' %}
+{% endblock %}

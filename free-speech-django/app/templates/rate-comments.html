@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans 'Rate Comments by Other Users' %}{% endblock %}
+{% block main-heading %}{% trans 'Rate Comments by Other Users' %}{% endblock %}
+
+{% block static-assets %}
+  {{ block.super }}
+  <script src="{% static 'js/d3.v4.min.js' %}"></script>
+  <script src="{% static 'js/bloom.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+  <p>
+    {% blocktrans trimmed %}
+      Each icon below is a comment made by another participant.
+      Next to each icon is the topic of the comment, or <span class="no-tag">(?)</span> if no topic was found.
+      Comments that are closer together were authored by participants who answered the quantitative questions similarly.
+    {% endblocktrans %}
+  <p>
+    {% blocktrans trimmed %}
+      Click on an icon to rate a comment on its helpfulness.
+      <strong>You must rate at least two comments to proceed.</strong>
+      You can also drag the icons to read the topics more clearly.
+    {% endblocktrans %}
+  </p>
+  <p id="no-more-comments-notice" class="error banner">
+    {% trans 'There are no more comments to rate.' %}
+  </p>
+  <svg id="bloom" width="100%"></svg>
+  <div class="modal">
+    <div class="modal-container">
+      <p>{% trans 'The question was:' %}</p>
+      <blockquote id="question-prompt"></blockquote>
+      <p>{% trans 'The comment was:' %}</p>
+      <blockquote id="comment-message"></blockquote>
+
+      <div class="range-container">
+        <input class="quantitative-input" target-id="comment-rating" type="range"
+               value="0" step="1" min="0" max="9">
+        <span class="left-anchor">{% trans 'Not helpful' %}</span>
+        <span class="right-anchor">{% trans 'Helpful' %}</span>
+      </div>
+      <p>
+        {% trans 'Your current answer is ' %} <output id="quantitative-output"></output>.
+      </p>
+
+      <ul class="button-group">
+        <li>
+          <button id="skip" class="red">{% trans 'Skip' %}</button>
+        </li>
+        <li>
+          <button id="submit" class="blue">{% trans 'Submit' %}</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+  {% url 'pcari:quantitative-questions' as previous_link %}
+  {% url 'pcari:qualitative-questions' as next_link %}
+  {% include 'nav-buttons.html' %}
+{% endblock %}
