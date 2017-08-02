@@ -81,6 +81,7 @@ ENV/
 *.sqlite3-journal
 *.csv
 *.xlsx
+*.pyc
 
 # macOS file finder files
 *.DS_Store
