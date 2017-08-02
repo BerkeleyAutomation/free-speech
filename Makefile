@@ -1,4 +1,4 @@
-# malasakit-v1/Makefile -- A collection of rules for testing and deploying the project
+# free-speech/Makefile -- A collection of rules for testing and deploying the project
 
 DJANGO_PROJECT_ROOT=free-speech-django
 DOCS_BUILD_PATH=docs-build
@@ -32,7 +32,7 @@ CLEANTEXT_TARGETS=\
 STATIC_ROOT_CMD=./manage.py shell -c 'from django.conf import settings; print(settings.STATIC_ROOT)'
 
 CREATE_PROD_DB_QUERY=\
-	CREATE DATABASE IF NOT EXISTS pcari CHARACTER SET utf8;\
+	CREATE DATABASE IF NOT EXISTS app CHARACTER SET utf8;\
 	GRANT ALL PRIVILEGES ON free-speech.* TO root@localhost;\
 	FLUSH PRIVILEGES;
 
@@ -48,10 +48,6 @@ lint: $(LINT_TARGETS:%.py=$(DJANGO_PROJECT_ROOT)/%.py)
 test:
 	cd $(DJANGO_PROJECT_ROOT) && ./manage.py test
 
-preparedocs:
-	mkdir -p $(DOCS_BUILD_PATH)
-	sphinx-apidoc -f -e -o $(DOCS_BUILD_PATH)/source $(DJANGO_PROJECT_ROOT)/pcari $(EXCLUDED_MODULES)
-
 createproddb:
 	mysql -e '$(CREATE_PROD_DB_QUERY)' -u root --password="$(shell printenv mysql_pass)"
 	cd $(DJANGO_PROJECT_ROOT) && ./manage.py migrate --run-syncdb
@@ -63,12 +59,15 @@ cleandb:
 	cd $(DJANGO_PROJECT_ROOT) && ./manage.py clearsessions
 	cd $(DJANGO_PROJECT_ROOT) && ./manage.py cleantext $(CLEANTEXT_TARGETS)
 
+compilestatic: install
+	cd $(DJANGO_PROJECT_ROOT)/app/static/css && export PATH=$$PATH:$(shell npm bin) && lessc -x main.less main.min.css
+
 disabledebug:
 	sed -i -e 's/DEBUG\s*=\s*True/DEBUG = False/g' $(DJANGO_PROJECT_ROOT)/cafe/settings.py
 
 collectstatic: compilestatic
 	cd $(DJANGO_PROJECT_ROOT) && ./manage.py collectstatic --no-input
 
-deploy: disabledebug collectstatic
+deploy: disabledebug collectstatic compiletrans
 	$(eval STATIC_ROOT=$(shell cd $(DJANGO_PROJECT_ROOT) && $(STATIC_ROOT_CMD)))
 	cd $(STATIC_ROOT)/css && rm *.less
